@@ -1,5 +1,3 @@
-# Uses python3
-from calendar import MONDAY
 import sys
 
 def get_change(m):
