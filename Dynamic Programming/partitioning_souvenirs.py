@@ -1,17 +1,16 @@
 values = []
-def backtrack(values, weight, i,j):
-    if i == 0 and j == 0:
+def backtrack(values, weight, i, n):
+    if i == 0 and n == 0:
         return
     
-    weight_of_item = weight[ i - 1]
+    weight_of_item = weight[ n - 1]
 
-    if i - weight_of_item >= 0 and (j - 1) >= 0:
-        if values[i][j] - ( values[ i - weight_of_item ][j] + weight_of_item ) == 0:
-            print(f'{weight_of_item}')
-            return backtrack(i - weight_of_item, j - 1)
-    elif values[i][j] - values[i][j - 1] == 0 and (j - 1) > 0:
-            print(f'{weight_of_item}')
-            return backtrack(i, j - 1)
+    if (n - 1) >= 0 and values[n][i] - ( values[n - 1][ i - weight_of_item ] + weight_of_item ) == 0:
+            #print(f'-{weight_of_item}-')
+            weight.remove(weight_of_item)
+            return backtrack(values, weight, i - weight_of_item, n - 1)
+    elif values[n][i] - values[n - 1][i] == 0 and (n - 1) >= 0:
+            return backtrack(values, weight, i, n - 1)
 
 def knapsack(W, w):
     n_int = len(w)
@@ -36,20 +35,23 @@ def knapsack(W, w):
             if i_was_used > values[i][weight]:
                 values[i][weight] = i_was_used
     
-    for i in range(0, n_int + 1):
-        for weight in range(0, W + 1):
-            print(f'{values[i][weight]} ', end='')
-        print('')
+    # for i in range(0, n_int + 1):
+    #     for weight in range(0, W + 1):
+    #         print(f'{values[i][weight]} ', end='')
+    #     print('')
     
-    backtrack(values, w, {})
-
-    return values[n_int][W]
+    backtrack(values, w, W, n_int)
+    return [values[n_int][W], w]
 
 arr = [17, 59, 34, 57, 17, 23, 67, 1, 18, 2, 59]
 sum = sum(arr)
 
 if sum % 3 == 0:
-    print(knapsack(118, arr))
+    [one, arr_two] = knapsack(118, arr)
+    [two, arr_three] = knapsack(118, arr_two)
+    
+    if one == two:
+        print(f'{one}')
 else:
     print(0)
 
