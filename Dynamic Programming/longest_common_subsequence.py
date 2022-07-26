@@ -1,6 +1,4 @@
 import sys
-from unittest import result
-from unittest.util import _Mismatch
 
 
 def lcs(a,b):
