@@ -2,12 +2,12 @@ import sys
 
 
 def backtrack(values, weight, i, n, ansx):
-    if i == 0 and n == 0:
+    if i == 0 or n == 0:
         return ansx
     
     weight_of_item = weight[ n - 1 ]
 
-    if (n - 1) >= 0 and i >= weight_of_item and ( values[n - 1][ i - weight_of_item ] + weight_of_item ) > values[n - 1][i]:
+    if (n - 1) >= 0 and i >= weight_of_item and ( values[n - 1][ i - weight_of_item ] + weight_of_item ) > values[n - 1][i] and values[n][i] - ( values[n - 1][ i - weight_of_item ] + weight_of_item )  == 0:
             ansx.append(weight_of_item)
             return backtrack(values, weight, i - weight_of_item, n - 1, ansx)
     elif (n - 1) >= 0:
@@ -15,6 +15,9 @@ def backtrack(values, weight, i, n, ansx):
     
 
 def knapsack(W, w):
+    # print(f'\nW - {W}')
+    if not w or W == 0:
+        return [W, []]
     n_int = len(w)
     values = [[None for j in range(W + 1)] for i in range(n_int + 1) ]
 
@@ -37,7 +40,19 @@ def knapsack(W, w):
                 values[i][weight] = i_was_used
     
     ans = []
+    # print()
+    # print(f'W {W} w{w} n_int {n_int} ')
+  
     collected = backtrack(values, w, W, n_int, ans)
+
+    # print()
+    # print(f'collected {collected}')
+
+
+    # for w in values:
+    #     for i in w:
+    #         print(i, end='')
+    #     print()
 
     if collected:
         for item in collected:
@@ -46,17 +61,17 @@ def knapsack(W, w):
     else:
         collected = []
 
-    return [values[n_int][W], w, collected]
+    return [w, collected]
 
 
 def partition_souvenirs(sum_x, arr):
     if sum_x % 3 == 0:
         sum_over_3 = sum_x // 3
-        [one, arr_two, c1] = knapsack(sum_over_3, arr)
+        [arr_two, c1] = knapsack(sum_over_3, arr)
         sum_one = sum(c1)
-        [two, arr_three, c2] = knapsack(sum_over_3, arr_two)
+        [arr_three, c2] = knapsack(sum_over_3, arr_two)
         sum_two = sum(c2)
-        [three, arr_four, c3] = knapsack(sum_over_3, arr_three)
+        [arr_four, c3] = knapsack(sum_over_3, arr_three)
         sum_three = sum(c3)
         if sum_one == sum_two and sum_two == sum_three and sum_one + sum_two + sum_three == sum_x:
             print(1)
@@ -69,8 +84,20 @@ def partition_souvenirs(sum_x, arr):
 if __name__ == '__main__':
     input = sys.stdin.read()
     num, *A = list(map(int, input.split()))
-    sum_arr = sum(A)
-    partition_souvenirs(sum_arr, A)
+
+    edge_case_failed = False
+
+    for x in A:
+        if x < 1 or x > 30:
+            edge_case_failed = True
+
+    if num < 1 or num < 3 or num > 20:
+        print(0)
+    elif edge_case_failed:
+        print(0)
+    else:
+        sum_arr = sum(A)
+        partition_souvenirs(sum_arr, A)
 
 
 
