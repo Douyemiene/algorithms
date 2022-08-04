@@ -7,7 +7,7 @@ def brackets_in_code(str):
     len_of_str = len(str)
 
     if len_of_str == 1:
-        return 0
+        return 1
     
     selectedLeft = ['{','[','(']
 
@@ -26,7 +26,7 @@ def brackets_in_code(str):
             indices_of_char.append(i)
         else:
             if len(myStack) == 0:
-                return i
+                return i + 1
 
             top = myStack.pop()
             indices_of_char.pop()
@@ -37,16 +37,13 @@ def brackets_in_code(str):
                        
             # print(f'{bool_one} {bool_two} {bool_three}')
             if bool_one or bool_two or bool_three:
-                print('failed case')
-                return i
+                return i + 1
         
-    
-    print(myStack)
     if len(myStack) == 0:
         return 'Success'
     else:
-        return indices_of_char[0]
+        return indices_of_char[0] + 1
 
 
-
-print(brackets_in_code(['{','}','(','[',']']))
+brackets = input()
+print(brackets_in_code(brackets))
