@@ -14,12 +14,17 @@ for index in range(len(nodes)):
 
 for index, node in enumerate(nodes):
     index_of_parent =  index_of_nodes[index]
+
+    if index_of_parent == -1:
+        continue
+
     parent = nodes[ index_of_parent ]
 
     parent.children.append(node)
 
-print(nodes[4].data)
+print(nodes[1].data)
 
 
-for n in nodes[4].children:
+for n in nodes[1].children:
     print('data',n.data)
+
