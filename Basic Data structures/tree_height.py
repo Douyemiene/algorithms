@@ -5,9 +5,10 @@ class Node:
       
 
 
-index_of_nodes = [4, -1, 4, 1, 1]
+index_of_nodes = [-1, 0, 4, 0, 3]
 nodes = [None] * len(index_of_nodes)
 
+index_of_root = None
 
 for index in range(len(nodes)):
     nodes[index] = Node(index)
@@ -16,15 +17,29 @@ for index, node in enumerate(nodes):
     index_of_parent =  index_of_nodes[index]
 
     if index_of_parent == -1:
+        index_of_root = index
         continue
 
     parent = nodes[ index_of_parent ]
 
     parent.children.append(node)
 
-print(nodes[1].data)
+
+def height(node):
+    if node == None:
+        return 0
+
+    children = [None] * len(node.children)
+
+    if children == []:
+        return 1
+
+    for i, child in enumerate(node.children):
+        children[i] = height(child)
+
+    return 1 + max(children)
 
 
-for n in nodes[1].children:
-    print('data',n.data)
+print(f'root {index_of_root}')
 
+print(height(nodes[index_of_root]))
