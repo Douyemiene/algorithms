@@ -17,7 +17,7 @@ class Buffer:
         # remove all packets that would have been processed before this one arrives
         for time in range(len(self.finish_time)):         
             if arrival_time > time and len(self.finish_time) != 0:
-                self.finish_time.popLeft()           #0(1) * 0(n_requests)
+                self.finish_time.popleft()           #0(1) * 0(n_requests)
 
         is_buffer_full = self.size == len(self.finish_time)
 
@@ -54,6 +54,9 @@ def main():
     for _ in range(n_requests):
         arrived_at, time_to_process = map(int, input().split())
         requests.append(Request(arrived_at, time_to_process))
+
+    if n_requests == 0:
+        print(0)
 
     buffer = Buffer(buffer_size)
     responses = process_requests(requests, buffer)
