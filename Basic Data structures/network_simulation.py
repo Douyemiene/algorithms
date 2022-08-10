@@ -14,11 +14,14 @@ class Buffer:
         arrival_time = request.arrived_at
 
         # remove all packets that would have been processed before this one arrives
+        removed = 0
         for index in range(len(self.finish_time)):         
             if len(self.finish_time) == 0:
                 break
-            if arrival_time >= self.finish_time[index]:
+            if arrival_time >= self.finish_time[index - removed]:
+                removed = removed + 1
                 self.finish_time.popleft()           #0(1) * 0(n_requests)
+        
 
         is_buffer_full = self.size == len(self.finish_time)
 
@@ -30,9 +33,6 @@ class Buffer:
             self.finish_time.append(packet_finish_time)  #0(1)
             return Response(False, arrival_time)
         else:
-            # if arrival_time >= last_finish_time:
-            #     return Response(False, arrival_time)
-            # else:
             last_finish_time = self.finish_time[-1]
             packet_finish_time = last_finish_time + request.time_to_process
             self.finish_time.append(packet_finish_time)  #0(1)
