@@ -1,24 +1,37 @@
 # python3
+def left(i):
+    return i * 2 + 1
 
+def right(i):
+    return i * 2 + 2
+
+def sift_down(arr, i):
+    if i < 0:
+        return
+
+    _left = left(i)
+    _right = right(i)
+
+    _max = i
+    arr_len = len(arr)
+
+    if _left < arr_len and arr[_left] > arr[_max]:
+        _max = _left
+    if _right < arr_len and arr[_right] > arr[_max]:
+        _max = _right
+
+    if _max != i:
+        arr[i], arr[_max] = arr[_max], arr[i]
+        return sift_down(arr, _max) 
+    
 
 def build_heap(data):
-    """Build a heap from ``data`` inplace.
+    size = len(data)
 
-    Returns a sequence of swaps performed by the algorithm.
-    """
-    # The following naive implementation just sorts the given sequence
-    # using selection sort algorithm and saves the resulting sequence
-    # of swaps. This turns the given array into a heap, but in the worst
-    # case gives a quadratic number of swaps.
-    #
-    # TODO: replace by a more efficient implementation
-    swaps = []
-    for i in range(len(data)):
-        for j in range(i + 1, len(data)):
-            if data[i] > data[j]:
-                swaps.append((i, j))
-                data[i], data[j] = data[j], data[i]
-    return swaps
+    mid = size // 2
+    for i in range(mid, -1, -1):
+        sift_down(data,i)
+    return data
 
 
 def main():
@@ -29,8 +42,9 @@ def main():
     swaps = build_heap(data)
 
     print(len(swaps))
-    for i, j in swaps:
-        print(i, j)
+    print(swaps)
+    # for i, j in swaps:
+    #     print(i, j)
 
 
 if __name__ == "__main__":
