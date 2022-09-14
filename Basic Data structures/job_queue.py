@@ -49,8 +49,6 @@ def right(i):
     return i * 2 + 2
 
 def sift_down(threads, thread_and_time):
-
-    time = thread_and_time.total_time
     i = thread_and_time.index
 
     if i < 0:
@@ -64,17 +62,18 @@ def sift_down(threads, thread_and_time):
 
     left_time = threads[_left].total_time
     right_time = right_time
-    min_time = threads[_min].total_time
 
-    if _left < threads_len and left_time < min_time:
+    if _left < threads_len and left_time < threads[_min].total_time:
         _min = _left
-    if _right < threads_len and right_time < min_time:
+    # check doesnt exist above because the index of the parent is always smaller than the chidren
+    # the index of the thread of the right needs to be smaller for us to swao
+    if _right < threads_len and right_time < threads[_min].total_time and threads[_right].index < threads[_min].index : 
         _min = _right
 
     min_time = threads[_min].total_time
 
     if _min != i:
-        threads[i].total_time, min_time = min_time, threads[i].total_time
+        threads[i], threads[_min] = threads[_min], threads[i]
         return sift_down(threads, _min) 
         
     return
