@@ -1,46 +1,7 @@
 # python3
 
 from collections import namedtuple
-import heapq
-
-AssignedJob = namedtuple("AssignedJob", ["worker", "started_at"])
-
-
-def assign_jobs(n_workers, jobs):
-    # TODO: replace this code with a faster algorithm.
-    result = []
-    next_free_time = [0] * n_workers
-    threads_total_time = next_free_time
-    heapq.heapify(threads_total_time)
-
-    for job in jobs:
-          time_of_free = threads_total_time.heappop()
-          threads_total_time.heappush(time_of_free + job)
-    #     next_worker = min(range(n_workers), key=lambda w: next_free_time[w])
-    #     result.append(AssignedJob(next_worker, next_free_time[next_worker]))
-    #     next_free_time[next_worker] += job
-
-    return result
-
-
-def main():
-    n_workers, n_jobs = map(int, input().split())
-    jobs = list(map(int, input().split()))
-    assert len(jobs) == n_jobs
-
-    assigned_jobs = assign_jobs(n_workers, jobs)
-
-    for job in assigned_jobs:
-        print(job.worker, job.started_at)
-
-
-if __name__ == "__main__":
-    main()
-
-
-
-
-thread_and_total_time = namedtuple("thread_and_total_time", ["index", "total_time"])
+import math
 
 def left(i):
     return i * 2 + 1
@@ -48,9 +9,7 @@ def left(i):
 def right(i):
     return i * 2 + 2
 
-def sift_down(threads, thread_and_time):
-    i = thread_and_time.index
-
+def sift_down(threads, i):
     if i < 0:
         return
 
@@ -60,21 +19,75 @@ def sift_down(threads, thread_and_time):
     _min = i
     threads_len = len(threads)
 
-    left_time = threads[_left].total_time
-    right_time = right_time
-
-    if _left < threads_len and left_time < threads[_min].total_time:
+    if _left < threads_len and threads[_left].total_time < threads[_min].total_time and threads[_left].index < threads[_min].index:
+        print('l smaller')
         _min = _left
     # check doesnt exist above because the index of the parent is always smaller than the chidren
     # the index of the thread of the right needs to be smaller for us to swao
-    if _right < threads_len and right_time < threads[_min].total_time and threads[_right].index < threads[_min].index : 
+    if _right < threads_len and threads[_right].total_time < threads[_min].total_time and threads[_right].index < threads[_min].index: 
+        print('l smaller')
         _min = _right
 
-    min_time = threads[_min].total_time
 
     if _min != i:
         threads[i], threads[_min] = threads[_min], threads[i]
         return sift_down(threads, _min) 
         
     return
+
+
+def build_heap(data):
+    size = len(data)
+
+    height = math.log2(size)
+    # subtract once for the fact that the first level has just one el
+    # again because we use zero based indices
+    mid = 2 ** math.floor(height) - 2
+
+    for i in range(mid, -1, -1):
+        sift_down(data,i)
+    print(data)
+
+
+
+AssignedJob = namedtuple("AssignedJob", ["worker", "started_at"])
+
+
+def assign_jobs(n_workers, jobs):
+    # TODO: replace this code with a faster algorithm.
+    thread_and_total_time = namedtuple("thread_and_total_time", ["index", "total_time"])
+    threads_and_total_time = []
+
+    for i in range(n_workers):
+        el = thread_and_total_time(i, 0)
+        threads_and_total_time.append(el)
+
+    for i in threads_and_total_time:
+        print(f'{i.index} {i.total_time}')
+        
+    print('heap starts here')
+    build_heap(threads_and_total_time)
+
+    output = []
+    for jobTimee in timeForjobs:
+        # extract min
+        _min = threads_and_total_time[0]
+        output.append(_min)
+        changePriority(thread_and_total_time, job)
+
+
+
+def main():
+    n_workers, n_jobs = map(int, input().split())
+    jobs = list(map(int, input().split()))
+    assert len(jobs) == n_jobs
+
+    assigned_jobs = assign_jobs(n_workers, jobs)
+
+    # for job in assigned_jobs:
+    #     print(job.worker, job.started_at)
+
+
+if __name__ == "__main__":
+    main()
     
