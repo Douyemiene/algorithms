@@ -26,7 +26,7 @@ def sift_down(threads, i):
     # error lives ther
     if _left < threads_len:
         leftHasSmallerTime = threads[_left].total_time < threads[_min].total_time
-        leftHasSmallerIndex = threads[_left].total_time < threads[_min].total_time and threads[_left].index < threads[_min].index
+        leftHasSmallerIndex = threads[_left].total_time == threads[_min].total_time and threads[_left].index < threads[_min].index
 
         if leftHasSmallerTime or leftHasSmallerIndex:
             _min = _left
@@ -35,7 +35,7 @@ def sift_down(threads, i):
     # the index of the thread of the right needs to be smaller for us to swao
     if _right < threads_len:
         rightHasSmallerTime = threads[_right].total_time < threads[_min].total_time
-        rightHasSmallerIndex = threads[_right].total_time < threads[_min].total_time and threads[_right].index < threads[_min].index
+        rightHasSmallerIndex = threads[_right].total_time == threads[_min].total_time and threads[_right].index < threads[_min].index
 
         if rightHasSmallerTime or rightHasSmallerIndex:
             _min = _right
