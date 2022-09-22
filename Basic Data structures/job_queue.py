@@ -1,7 +1,11 @@
 # python3
 
 from collections import namedtuple
+from concurrent.futures import thread
 import math
+
+
+thread_and_total_time = namedtuple("thread_and_total_time", ["index", "total_time"])
 
 def left(i):
     return i * 2 + 1
@@ -18,7 +22,8 @@ def sift_down(threads, i):
 
     _min = i
     threads_len = len(threads)
-
+    
+    # error lives ther
     if _left < threads_len and threads[_left].total_time < threads[_min].total_time and threads[_left].index < threads[_min].index:
         print('l smaller')
         _min = _left
@@ -48,14 +53,18 @@ def build_heap(data):
         sift_down(data,i)
     print(data)
 
-
+def changePriority(queue, jobTime):
+    rootTotalTime = queue[0][1]
+    
+    thread = thread_and_total_time(queue[0][0],  rootTotalTime + jobTime)
+    queue[0] = thread
+    sift_down(queue, 0)
 
 AssignedJob = namedtuple("AssignedJob", ["worker", "started_at"])
 
 
 def assign_jobs(n_workers, jobs):
     # TODO: replace this code with a faster algorithm.
-    thread_and_total_time = namedtuple("thread_and_total_time", ["index", "total_time"])
     threads_and_total_time = []
 
     for i in range(n_workers):
@@ -69,11 +78,15 @@ def assign_jobs(n_workers, jobs):
     build_heap(threads_and_total_time)
 
     output = []
-    for jobTimee in timeForjobs:
+    for jobTime in jobs:
         # extract min
         _min = threads_and_total_time[0]
         output.append(_min)
-        changePriority(thread_and_total_time, job)
+        changePriority(threads_and_total_time, jobTime)
+
+    print('output')
+    for el in output:
+        print(f'{el.index} {el.total_time}')
 
 
 
@@ -91,3 +104,8 @@ def main():
 if __name__ == "__main__":
     main()
     
+
+
+
+
+# 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
