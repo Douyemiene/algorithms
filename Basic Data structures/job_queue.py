@@ -58,7 +58,6 @@ def build_heap(data):
 
     for i in range(mid, -1, -1):
         sift_down(data,i)
-    print(data)
 
 def changePriority(queue, jobTime):
     rootTotalTime = queue[0][1]
@@ -78,10 +77,10 @@ def assign_jobs(n_workers, jobs):
         el = thread_and_total_time(i, 0)
         threads_and_total_time.append(el)
 
-    for i in threads_and_total_time:
-        print(f'{i.index} {i.total_time}')
+    # for i in threads_and_total_time:
+    #     print(f'{i.index} {i.total_time}')
         
-    print('heap starts here')
+    # print('heap starts here')
     build_heap(threads_and_total_time)
 
     output = []
@@ -91,7 +90,6 @@ def assign_jobs(n_workers, jobs):
         output.append(_min)
         changePriority(threads_and_total_time, jobTime)
 
-    print('output')
     for el in output:
         print(f'{el.index} {el.total_time}')
 
@@ -102,17 +100,9 @@ def main():
     jobs = list(map(int, input().split()))
     assert len(jobs) == n_jobs
 
-    assigned_jobs = assign_jobs(n_workers, jobs)
+    assign_jobs(n_workers, jobs)
 
-    # for job in assigned_jobs:
-    #     print(job.worker, job.started_at)
 
 
 if __name__ == "__main__":
     main()
-    
-
-
-
-
-# 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
