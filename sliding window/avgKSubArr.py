@@ -18,9 +18,9 @@ def maxsubarr(arr,k):
     result.append(prevSum / k)
 
     for i in range(1, stopIndex + 1):
-        sum = prevSum - arr[i -1] + arr[i + k - 1]    
-        result.append(sum/k)
-        prevSum = sum
+        _sum = prevSum - arr[i -1] + arr[i + k - 1]    
+        result.append(_sum/k)
+        prevSum = _sum
 
     return result
 
