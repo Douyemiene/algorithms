@@ -1,48 +1,29 @@
-def max_distinct_chars(charArr, k):
-    # char_one: index, lastIndex
-    charDict = {}
-    
-    if len(charArr) == 0:
-        return 0
+def max_distinct_chars(theStr, k):
+    window_start = 0
+    max_distinct_count = 0
+    window = {}
 
-    maxDistinctCount = 0
-
-    for index, char in enumerate(charArr):   #Big-o is linear to the array length
-        if char not in charDict:
-            charDict[char] = [index, index, 0]
-
-            if len(charDict) > k:
-                # remove key so there are only 2 chars in our window
-                # remove the key that is not the one closer to our new char
-                keyToDelete = ""
-                for key in charDict:
-                    if key != charArr[index -1] and key != char:
-                        keyToDelete = key
-
-                for key in charDict:
-                    if key != keyToDelete and key != char:
-                        keyToUpdate = key
-                
-                # update the firsItndex of the key that will remain in the charDict
-                charDict[keyToUpdate][0] = charDict[keyToDelete][1] + 1
-                del charDict[keyToDelete]
-
-                listOfChars = list(charDict.values())        
-                newDistantCount = 0
-
-                for char in listOfChars:
-                    if char != keyToUpdate:
-                        
-
-                if newDistantCount > maxDistinctCount:
-                    maxDistinctCount = newDistantCount
-
+    for window_end, char in enumerate(theStr):
+        if char in window:
+            window[char] += 1
         else:
-            charDict[char][1] = index # update the character's last index in the window
-            ++charDict[char][2]
+            window[char] = 1
 
 
-    return maxDistinctCount
 
+        while len(window) > k:
+            charAtStart = theStr[window_start]
+            window[charAtStart] -= 1
+
+            if window[charAtStart] == 0:
+                del window[charAtStart]
+            window_start += 1
+
+   
+        new_distinct_count = window_end - window_start + 1
+        max_distinct_count = max(max_distinct_count, new_distinct_count)
+
+    return max_distinct_count
 
 print(max_distinct_chars("araaci", 2))    
+
