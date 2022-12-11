@@ -33,7 +33,7 @@ class Solution(object):
 
 def main():
     solution = Solution()
-    print(solution.threeSum([0,0,0, 0]))
+    print(solution.threeSum([0,0,0,0]))
 
 
 main()
