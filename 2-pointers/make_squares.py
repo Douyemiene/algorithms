@@ -5,7 +5,7 @@ def make_squares(arr):
     squares = [0 for x in range(arr_length)]
     current_index = arr_length - 1
 
-    while current_index > 0:
+    while current_index > 0: # when current_index gets to zero the array will be full
         sqr_left_pointer_element = arr[left] ** 2
         sqr_right_pointer_element = arr[right] ** 2
 
