@@ -9,41 +9,58 @@
 
 # target = 8
 # [-3, 5, 6, 1, -4, 5, 4]
-# 8 - (x + y + z) = small
-# 8 - (x + y) - small = z
-# 8 - z = x + y - small
 # [-4, -3, 1, 4, 5, 5, 6]
-# 8 - (-4) = 12
-# small = 8 - z - (x +y)
+# [-8, 12]
+# [-6, 10]
+# 8 - (x + y + z) = small
+# s = 8 - z - sum 
 # s = 12 - (x + y)
 # x + y + z = 8
 # 8 - z = x + y
 # take abs
+
+# [-2, 0, 1, 2], 2)
+# 
+
 import sys
 
 def three_sum_close_to_target(arr, target_sum):
-    arr_length = len(arr)
+    arr.sort()
+    arr_length = len(arr) # 4
 
-    closest_diff = - sys.maxsize
+    closest_diff = sys.maxsize
+    triplets = [] # 2
 
-    for i, first in enumerate(arr):
-        current_target = 8 - first
-        left = i
-        right = arr_length - 1
+    for i, first in enumerate(arr): # 0
+        left = i + 1 # 1
+        right = arr_length - 1 # 3
 
+        while left < right: # 1 < 3,
+            _sum = arr[left] + arr[right] # 2
 
-        while left < right:
-            _sum = left + right
+            current_diff = abs(target_sum - first - _sum) # 2 
 
-            current_diff = current_target - _sum
+            if current_diff < closest_diff: # 2 < big
+                triplets.clear()
+                triplets.append([first, arr[left], arr[right]]) 
+            elif current_diff == closest_diff:
+                triplets.append([first, arr[left], arr[right]])
 
-            closest_diff = min(current_diff, closest_diff)
-
-            if closest_diff == current_diff:
+            # 2 - (-2)= 4 > 2
+            if (target_sum - first) > _sum: # make +ve result smaller by increasing sum
                 left += 1
-                pass
+            else:
+                right -= 1
+                
+
+    return triplets
+
+    
+def main():
+  print(three_sum_close_to_target([-2, 0, 1, 2], 2))
+  print(three_sum_close_to_target([-3, -1, 1, 2], 1))
+  print(three_sum_close_to_target([1, 0, 1, 1], 100))
 
 
 
-
-
+main()
