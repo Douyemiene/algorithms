@@ -1,57 +1,82 @@
 class Node:
-    def __init__(self, value, next):
+    def __init__(self, value, next=None):
         self.value = value
         self.next = next
 
     def set_next(self, node):
         self.next = node
 
- # 1 - 2 - 3 - 4 - 2
+
 def node_pointers_meet_in_cycle(head):
-    slow = head.next 
-    fast = head.next.next 
-    
-    while fast != slow:
-            slow = slow.next 
+    slow = head
+    fast = head
 
-            if fast.next == None:
-                return None
-            fast = fast.next.next 
+    while fast is not None and fast.next is not None:
+        slow = slow.next
+        fast = fast.next.next
 
-    return fast
+        if slow == fast:
+            return fast
+
+    return None
+
+# 1 2 3 4 5 6 - 1
+def get_cycle_start(head, length_of_cycle):
+    first = head
+    second = head
+
+    for _ in range(length_of_cycle):
+        second = second.next
+
+    if second == head:
+        return head
+
+    while True:
+        first = first.next
+        second = second.next
+
+        if first == second:
+            return first
 
 
-def find_cycle_start():
-    # one,
-    # check if there is a cycle
-        # yes? -> return the node where the cycle occurs (node_pointers_meet)
-            # get two pointers, place one at the head of our list
-            # make the other point to node_pointers_meet
-            # update pointers to point to their adjacent node
-            # till both are at the same node (the start of the cycle)
-        # no? -> return None
-    pass
+def get_cycle_length(node_in_cycle):
+    current = node_in_cycle.next 
+    cycle_length = 1
+
+    while current != node_in_cycle:
+        current = current.next 
+        cycle_length += 1  
+
+    return cycle_length
+
+
+def find_cycle_start(head):
+    node_pointers_meet = node_pointers_meet_in_cycle(head)
+
+    if node_pointers_meet == None:
+        return None
+
+    length_of_cycle = get_cycle_length(node_pointers_meet)
+
+    return get_cycle_start(head, length_of_cycle)
+
 
 def main():
-    node4 = Node(4, None)
-    node3 = Node(3, node4)
-    node2 = Node(2, node3)
-    head = Node(1, node2)
-    node4.next = node2
-    # node6 = Node(6, None)
-    # node5 = Node(5, node6)
-    # node4 = Node(4, node5)
-    # node3 = Node(3, node4)
-    # node2 = Node(2, node3)
-    # head = Node(1, node2)
+    head = Node(1)
+    head.next = Node(2)
+    head.next.next = Node(3)
+    head.next.next.next = Node(4)
+    head.next.next.next.next = Node(5)
+    head.next.next.next.next.next = Node(6)
 
+    head.next.next.next.next.next.next = head.next.next
+    print("LinkedList cycle start: " + str(find_cycle_start(head).value))
 
-    # current = head
-    # while current != None:
-    #     print(f'{current.value}')
-    #     current = current.next
-    node_pointers_meet = node_pointers_meet_in_cycle(head)
-    print(node_pointers_meet.value)
-    
+    head.next.next.next.next.next.next = head.next.next.next
+    print("LinkedList cycle start: " + str(find_cycle_start(head).value))
+
+    head.next.next.next.next.next.next = head
+    print("LinkedList cycle start: " + str(find_cycle_start(head).value))
+
 
 main()
